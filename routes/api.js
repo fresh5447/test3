@@ -5,6 +5,10 @@ var router = express.Router();
 var mongoose = require("mongoose");
 mongoose.connect(process.env.MONGOHQ_URL);
 
+var gravatarRouter = process.env.GRAVATAR_URL;
+
+
+
 var questionSchema = new mongoose.Schema({
   code: String,
   email: String,

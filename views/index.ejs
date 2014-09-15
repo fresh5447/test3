@@ -29,6 +29,10 @@
           data = { questions: list };
           refreshView();
         });
+          $.ajax("/api/gravatar/:email").then(function(email) {
+              data = { gravatar: email };
+              refreshView();
+          });
 
         $(".output").on("click", "button", function(e) {
           var $button = $(this);
