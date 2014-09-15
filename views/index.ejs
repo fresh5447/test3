@@ -81,11 +81,13 @@
     <script id="template" type="text/x-handlebars-template">
       <table class="table table-striped">
       <tr>
+        <th>Gravatar</th>
         <th>Email</th>
         <th>Question</th>
       </tr>
       {{#each questions}}
         <tr data-code="{{code}}" data-index="{{@index}}">
+            <td><%= gravatar %></td>
           <td>{{email}}</td>
           <td>
             {{#if editing}}

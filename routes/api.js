@@ -8,7 +8,8 @@ mongoose.connect(process.env.MONGOHQ_URL);
 var questionSchema = new mongoose.Schema({
   code: String,
   email: String,
-  question: String
+  question: String,
+  gravatar: {}
 });
 
 var answerSchema = new mongoose.Schema({
@@ -98,7 +99,11 @@ router.get("/questions/:questionCode", function(req, res) {
 
 
 router.get("/gravatar/:email", function(req, res) {
-  // Return the gravatar url as text
+   res.json("www.gravatar.com/" + req.params.email );
+});
+
+router.post("/gravatar/:email", function(req, res) {
+    res.json("www.gravatar.com/" + req.params.email );
 });
 
 module.exports = router;
