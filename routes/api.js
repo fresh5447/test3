@@ -5,7 +5,6 @@ var router = express.Router();
 var mongoose = require("mongoose");
 mongoose.connect(process.env.MONGOHQ_URL);
 
-var gravatarRouter = process.env.GRAVATAR_URL;
 
 
 
@@ -101,13 +100,14 @@ router.get("/questions/:questionCode", function(req, res) {
   });
 });
 
+var util = require("../public/javascripts/util");
 
 router.get("/gravatar/:email", function(req, res) {
-   res.json("www.gravatar.com/" + req.params.email );
+    var md5email = util.md5(req.params.email);
+    res.end("http://www.gravatar.com/avatar/" + md5email);
 });
 
-router.post("/gravatar/:email", function(req, res) {
-    res.json("www.gravatar.com/" + req.params.email );
-});
+
+
 
 module.exports = router;

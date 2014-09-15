@@ -281,5 +281,5 @@ var md5 = function(str) {
 
   return temp.toLowerCase();
 };
-
+//allows me to use this API
 module.exports.md5 = md5;

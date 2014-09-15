@@ -12,15 +12,36 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v2.0.0.js"></script>
+      <script>
+          var module = { exports: {}};
+      </script>
+
+      <script src="/javascripts/util.js"></script>
     <script>
       $(function() {
+        var gravatarLookup = "<%= gravatarLookup %>";
         var source   = $("#template").html();
         var template = Handlebars.compile(source);
         var data = {};
 
+        var gravatarUrl = function(email){
+              return "http://www.gravatar.com/avatar/" + md5(email);
+          };
+
         var refreshView = function(){
             var html = template(data);
             $(".output").html(html);
+            $(".gravatar-img").each(function(i, e){
+                var $e = $(e);
+                var thisEmail = $e.data("email");
+                if (gravatarLookup === "api"){
+                    $.ajax("/api/gravatar/" + thisEmail).then(function(data){ //this code is not effective, we don't really need to do it server side.. this is achievable with JS
+                    $e.attr("src", data).removeClass("hidden"); //N + 1 HHTP problem
+                    });
+                } else {
+                  $e.attr("src", gravatarUrl(thisEmail)).removeClass("hidden");
+                }
+              });
         };
 
         refreshView({});
@@ -29,10 +50,7 @@
           data = { questions: list };
           refreshView();
         });
-          $.ajax("/api/gravatar/:email").then(function(email) {
-              data = { gravatar: email };
-              refreshView();
-          });
+
 
         $(".output").on("click", "button", function(e) {
           var $button = $(this);
@@ -91,7 +109,9 @@
       </tr>
       {{#each questions}}
         <tr data-code="{{code}}" data-index="{{@index}}">
-            <td><%= gravatar %></td>
+            <td>
+                <img class="hidden gravatar-img" src="" data-email="{{email}}"/>
+            </td>
           <td>{{email}}</td>
           <td>
             {{#if editing}}
